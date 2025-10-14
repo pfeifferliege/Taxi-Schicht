@@ -74,42 +74,51 @@
         <div class="bg-gray-800 p-6 rounded-2xl shadow-lg mb-8">
             <h2 class="text-2xl font-semibold mb-4 text-center">Neue Fahrt hinzufügen</h2>
             <form id="trip-form" class="space-y-4">
-                <div>
-                    <span class="block text-sm font-medium text-gray-300 mb-2">Zahlungsart</span>
-                    <div class="grid grid-cols-2 gap-4">
-                        <button type="button" data-method="Bar" class="payment-method-btn bg-gray-700 border-2 border-transparent text-white font-semibold py-3 rounded-lg transition-all duration-200">Bar</button>
-                        <button type="button" data-method="EC" class="payment-method-btn bg-gray-700 border-2 border-transparent text-white font-semibold py-3 rounded-lg transition-all duration-200">EC-Karte</button>
-                    </div>
-                </div>
-                <div>
-                    <label for="fare" class="block text-sm font-medium text-gray-300 mb-1">Summe / Fahrpreis (€)</label>
-                    <input type="number" id="fare" step="0.01" min="0" placeholder="z.B. 15.50" required class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                </div>
-
-                 <div id="cash-input-group" class="space-y-4 cash-input-group">
+                
+                <!-- 1. Auswahl der Zahlungsart (Initial sichtbar) -->
+                <div id="payment-method-selection" class="space-y-4">
                     <div>
-                        <label for="gegeben" class="block text-sm font-medium text-gray-300 mb-1">Gegeben (€)</label>
-                        <input type="number" id="gegeben" step="0.01" min="0" placeholder="z.B. 20.00" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
+                        <span class="block text-sm font-medium text-gray-300 mb-2">Zahlungsart</span>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button type="button" data-method="Bar" class="payment-method-btn bg-gray-700 border-2 border-transparent text-white font-semibold py-3 rounded-lg transition-all duration-200">Bar</button>
+                            <button type="button" data-method="EC" class="payment-method-btn bg-gray-700 border-2 border-transparent text-white font-semibold py-3 rounded-lg transition-all duration-200">EC-Karte</button>
+                        </div>
                     </div>
+                </div>
+
+                <!-- 2. Eingabefelder (Initial versteckt) -->
+                <div id="trip-input-fields" class="space-y-4 hidden">
+                    
                     <div>
-                        <label for="rueckgeld" class="block text-sm font-medium text-gray-300 mb-1">Rückgeld (berechnet)</label>
-                        <input type="number" id="rueckgeld" placeholder="Wird berechnet" readonly class="w-full bg-gray-600 border border-gray-500 rounded-lg p-3 text-white cursor-not-allowed">
+                        <label for="fare" class="block text-sm font-medium text-gray-300 mb-1">Summe / Fahrpreis (€)</label>
+                        <input type="number" id="fare" step="0.01" min="0" placeholder="z.B. 15.50" required class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
                     </div>
 
-                     <div>
-                        <label for="rueckgeldTats" class="block text-sm font-medium text-gray-300 mb-1">Rückgeld (tatsächlich)</label>
-                        <input type="number" id="rueckgeldTats" step="0.01" min="0" placeholder="z.B. 18.00" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
+                     <div id="cash-input-group" class="space-y-4 cash-input-group">
+                        <div>
+                            <label for="gegeben" class="block text-sm font-medium text-gray-300 mb-1">Gegeben (€)</label>
+                            <input type="number" id="gegeben" step="0.01" min="0" placeholder="z.B. 20.00" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
+                        </div>
+                        <div>
+                            <label for="rueckgeld" class="block text-sm font-medium text-gray-300 mb-1">Rückgeld (berechnet)</label>
+                            <input type="number" id="rueckgeld" placeholder="Wird berechnet" readonly class="w-full bg-gray-600 border border-gray-500 rounded-lg p-3 text-white cursor-not-allowed">
+                        </div>
+
+                         <div>
+                            <label for="rueckgeldTats" class="block text-sm font-medium text-gray-300 mb-1">Rückgeld (tatsächlich)</label>
+                            <input type="number" id="rueckgeldTats" step="0.01" min="0" placeholder="z.B. 18.00" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
+                        </div>
                     </div>
-                </div>
 
-                <div>
-                    <label for="tip" class="block text-sm font-medium text-gray-300 mb-1">Trinkgeld (€)</label>
-                    <input type="number" id="tip" step="0.01" min="0" placeholder="Wird bei Barzahlung berechnet" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                </div>
+                    <div>
+                        <label for="tip" class="block text-sm font-medium text-gray-300 mb-1">Trinkgeld (€)</label>
+                        <input type="number" id="tip" step="0.01" min="0" placeholder="Wird bei Barzahlung berechnet" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
+                    </div>
 
-                <button type="submit" class="w-full btn-primary bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 rounded-lg shadow-md text-lg">
-                    Berechnen
-                </button>
+                    <button type="submit" class="w-full btn-primary bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 rounded-lg shadow-md text-lg">
+                        Berechnen
+                    </button>
+                </div>
             </form>
         </div>
 
@@ -140,9 +149,11 @@
                 <h2 class="text-2xl font-semibold mr-auto">Protokoll</h2>
                 <div class="flex items-center gap-2 flex-wrap">
                     
+                    <!-- Button Abschließen -->
                     <button id="end-shift-btn" class="action-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-lg flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" /></svg> Abschließen
                     </button>
+                    <!-- Button für den Gesamtabschluss -->
                     <button id="show-overall-summary-btn" class="action-btn bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-3 rounded-lg flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v5a1 1 0 001 1h2a1 1 0 100-2h-1V7z" clip-rule="evenodd" /></svg> Gesamt
                     </button>
@@ -154,6 +165,7 @@
         </div>
     </div>
 
+    <!-- Modal für Schichtabschließen (Bestätigung) -->
     <div id="confirmation-modal" class="modal p-4">
         <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center">
             <h3 class="text-xl font-bold mb-4">Schicht wirklich abschließen?</h3>
@@ -165,7 +177,9 @@
         </div>
     </div>
 
+    <!-- MODAL für den Gesamtabschluss -->
     <div id="overall-summary-modal" class="modal p-4">
+        <!-- Scrollbarkeit auf Containerebene hinzugefügt -->
         <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-lg w-full max-h-full overflow-y-auto">
             <h3 class="text-2xl font-bold mb-6 text-yellow-400">Gesamtabschluss</h3>
             <p id="overall-summary-shifts-count" class="text-gray-400 mb-4"></p>
@@ -189,10 +203,12 @@
                 </div>
             </div>
             
+            <!-- Liste der abgeschlossenen Schichten -->
             <div class="mt-6 border-t border-gray-700 pt-4">
                  <h4 class="text-lg font-semibold mb-2">Abgeschlossene Schichten:</h4>
                  <ul id="overall-shift-list" class="space-y-2 max-h-40 overflow-y-auto pr-2">
-                     </ul>
+                     <!-- Schichten werden hier durch JS eingefügt -->
+                 </ul>
             </div>
 
             <div class="flex justify-end gap-3 mt-6">
@@ -215,6 +231,10 @@
             const paymentMethodButtons = document.querySelectorAll('.payment-method-btn');
             const tripsList = document.getElementById('trips-list');
             const noTripsMessage = document.getElementById('no-trips-message');
+
+            // NEUE ELEMENTE FÜR DIE SICHTBARKEITSSTEUERUNG
+            const paymentMethodSelection = document.getElementById('payment-method-selection');
+            const tripInputFields = document.getElementById('trip-input-fields');
 
             // Cash inputs
             const cashInputGroup = document.getElementById('cash-input-group');
@@ -490,6 +510,14 @@
                 localStorage.setItem('allCompletedShifts', JSON.stringify(allCompletedShifts));
                 renderTrips();
             };
+            
+            // Funktion zum Zurücksetzen der Auswahlbuttons
+            const resetPaymentSelection = () => {
+                 paymentMethodButtons.forEach(btn => {
+                    btn.classList.remove('bg-yellow-500', 'border-yellow-500', 'text-gray-900');
+                    btn.classList.add('bg-gray-700', 'border-transparent');
+                });
+            };
 
             // --- EVENT LISTENER ---
 
@@ -501,13 +529,17 @@
                 button.addEventListener('click', (e) => {
                     e.preventDefault(); 
 
-                    paymentMethodButtons.forEach(btn => {
-                        btn.classList.remove('bg-yellow-500', 'border-yellow-500', 'text-gray-900');
-                        btn.classList.add('bg-gray-700', 'border-transparent');
-                    });
+                    resetPaymentSelection();
+                    
+                    // Button stylen
                     button.classList.add('bg-yellow-500', 'border-yellow-500', 'text-gray-900');
                     selectedPaymentMethod = button.dataset.method;
+                    
+                    // Sichtbarkeit umschalten
+                    paymentMethodSelection.classList.add('hidden');
+                    tripInputFields.classList.remove('hidden');
 
+                    // Bar/EC spezifische Logik
                     if (selectedPaymentMethod === 'Bar') {
                         cashInputGroup.classList.add('visible');
                         tipInput.readOnly = true;
@@ -542,7 +574,7 @@
                 e.preventDefault();
 
                 if (!selectedPaymentMethod) {
-                    alert('Bitte wählen Sie eine Zahlungsart aus.');
+                    alert('Interner Fehler: Zahlungsart nicht ausgewählt.');
                     return;
                 }
 
@@ -579,8 +611,12 @@
                 gegebenInput.value = '';
                 rueckgeldInput.value = '';
                 rueckgeldTatsInput.value = '';
-
-                fareInput.focus();
+                
+                // Sichtbarkeit umschalten und Zustand zurücksetzen
+                tripInputFields.classList.add('hidden');
+                paymentMethodSelection.classList.remove('hidden');
+                resetPaymentSelection();
+                selectedPaymentMethod = '';
             });
 
             // Schicht abschließen Logik
@@ -650,4 +686,3 @@
     </script>
 </body>
 </html>
-                
