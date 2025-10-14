@@ -44,7 +44,7 @@
             max-height: 500px; /* Adjust as needed */
             opacity: 1;
         }
-        /* Style f¸r das Modal */
+        /* Style f√ºr das Modal */
         .modal {
             position: fixed;
             inset: 0;
@@ -68,11 +68,11 @@
 
         <div class="bg-gray-800 p-4 rounded-2xl shadow-lg mb-6">
              <label for="fahrername" class="block text-sm font-medium text-gray-300 mb-1">Fahrername</label>
-             <input type="text" id="fahrername" placeholder="Ihr Name f¸r den Export" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
+             <input type="text" id="fahrername" placeholder="Ihr Name f√ºr den Export" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
         </div>
 
         <div class="bg-gray-800 p-6 rounded-2xl shadow-lg mb-8">
-            <h2 class="text-2xl font-semibold mb-4 text-center">Neue Fahrt hinzuf¸gen</h2>
+            <h2 class="text-2xl font-semibold mb-4 text-center">Neue Fahrt hinzuf√ºgen</h2>
             <form id="trip-form" class="space-y-4">
                 <div>
                     <span class="block text-sm font-medium text-gray-300 mb-2">Zahlungsart</span>
@@ -82,28 +82,28 @@
                     </div>
                 </div>
                 <div>
-                    <label for="fare" class="block text-sm font-medium text-gray-300 mb-1">Summe / Fahrpreis (Ä)</label>
+                    <label for="fare" class="block text-sm font-medium text-gray-300 mb-1">Summe / Fahrpreis (‚Ç¨)</label>
                     <input type="number" id="fare" step="0.01" min="0" placeholder="z.B. 15.50" required class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
                 </div>
 
                  <div id="cash-input-group" class="space-y-4 cash-input-group">
                     <div>
-                        <label for="gegeben" class="block text-sm font-medium text-gray-300 mb-1">Gegeben (Ä)</label>
+                        <label for="gegeben" class="block text-sm font-medium text-gray-300 mb-1">Gegeben (‚Ç¨)</label>
                         <input type="number" id="gegeben" step="0.01" min="0" placeholder="z.B. 20.00" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
                     </div>
                     <div>
-                        <label for="rueckgeld" class="block text-sm font-medium text-gray-300 mb-1">R¸ckgeld (berechnet)</label>
+                        <label for="rueckgeld" class="block text-sm font-medium text-gray-300 mb-1">R√ºckgeld (berechnet)</label>
                         <input type="number" id="rueckgeld" placeholder="Wird berechnet" readonly class="w-full bg-gray-600 border border-gray-500 rounded-lg p-3 text-white cursor-not-allowed">
                     </div>
 
                      <div>
-                        <label for="rueckgeldTats" class="block text-sm font-medium text-gray-300 mb-1">R¸ckgeld (tats‰chlich)</label>
+                        <label for="rueckgeldTats" class="block text-sm font-medium text-gray-300 mb-1">R√ºckgeld (tats√§chlich)</label>
                         <input type="number" id="rueckgeldTats" step="0.01" min="0" placeholder="z.B. 18.00" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
                     </div>
                 </div>
 
                 <div>
-                    <label for="tip" class="block text-sm font-medium text-gray-300 mb-1">Trinkgeld (Ä)</label>
+                    <label for="tip" class="block text-sm font-medium text-gray-300 mb-1">Trinkgeld (‚Ç¨)</label>
                     <input type="number" id="tip" step="0.01" min="0" placeholder="Wird bei Barzahlung berechnet" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
                 </div>
 
@@ -118,19 +118,19 @@
             <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="summary-card bg-green-500/20 border border-green-500 p-4 rounded-xl text-center">
                     <h3 class="text-sm font-medium text-green-300 uppercase">Bar-Einnahmen</h3>
-                    <p id="cash-total" class="text-3xl font-bold text-white">0.00 Ä</p>
+                    <p id="cash-total" class="text-3xl font-bold text-white">0.00 ‚Ç¨</p>
                 </div>
                 <div class="summary-card bg-blue-500/20 border border-blue-500 p-4 rounded-xl text-center">
                     <h3 class="text-sm font-medium text-blue-300 uppercase">EC-Einnahmen</h3>
-                    <p id="card-total" class="text-3xl font-bold text-white">0.00 Ä</p>
+                    <p id="card-total" class="text-3xl font-bold text-white">0.00 ‚Ç¨</p>
                 </div>
                 <div class="summary-card bg-purple-500/20 border border-purple-500 p-4 rounded-xl text-center">
                     <h3 class="text-sm font-medium text-purple-300 uppercase">Gesamt Trinkgeld</h3>
-                    <p id="tip-total" class="text-3xl font-bold text-white">0.00 Ä</p>
+                    <p id="tip-total" class="text-3xl font-bold text-white">0.00 ‚Ç¨</p>
                 </div>
                 <div class="summary-card bg-yellow-500/20 border border-yellow-500 p-4 rounded-xl text-center">
                     <h3 class="text-sm font-medium text-yellow-300 uppercase">Gesamt Fahrpreis</h3>
-                    <p id="fare-grand-total" class="text-3xl font-bold text-white">0.00 Ä</p>
+                    <p id="fare-grand-total" class="text-3xl font-bold text-white">0.00 ‚Ç¨</p>
                 </div>
             </div>
         </div>
@@ -141,7 +141,7 @@
                 <div class="flex items-center gap-2 flex-wrap">
                     
                     <button id="end-shift-btn" class="action-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-lg flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" /></svg> Abschlieﬂen
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" /></svg> Abschlie√üen
                     </button>
                     <button id="show-overall-summary-btn" class="action-btn bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-3 rounded-lg flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v5a1 1 0 001 1h2a1 1 0 100-2h-1V7z" clip-rule="evenodd" /></svg> Gesamt
@@ -149,17 +149,17 @@
                 </div>
             </div>
             <div id="trips-list" class="space-y-3 max-h-96 overflow-y-auto pr-2">
-                <p id="no-trips-message" class="text-gray-400 text-center py-4">Noch keine Fahrten f¸r diese Schicht erfasst.</p>
+                <p id="no-trips-message" class="text-gray-400 text-center py-4">Noch keine Fahrten f√ºr diese Schicht erfasst.</p>
             </div>
         </div>
     </div>
 
     <div id="confirmation-modal" class="modal p-4">
         <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center">
-            <h3 class="text-xl font-bold mb-4">Schicht wirklich abschlieﬂen?</h3>
-            <p class="text-gray-400 mb-6">Die aktuelle Schicht wird gespeichert. Alle erfassten Fahrten werden aus dem Protokoll gelˆscht, um eine neue Schicht zu starten.</p>
+            <h3 class="text-xl font-bold mb-4">Schicht wirklich abschlie√üen?</h3>
+            <p class="text-gray-400 mb-6">Die aktuelle Schicht wird gespeichert. Alle erfassten Fahrten werden aus dem Protokoll gel√∂scht, um eine neue Schicht zu starten.</p>
             <div class="flex justify-center gap-4">
-                <button id="confirm-end-shift" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg transition-colors">Ja, abschlieﬂen</button>
+                <button id="confirm-end-shift" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg transition-colors">Ja, abschlie√üen</button>
                 <button id="cancel-end-shift" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg transition-colors">Abbrechen</button>
             </div>
         </div>
@@ -173,19 +173,19 @@
             <div class="space-y-3 mb-6">
                 <div class="flex justify-between items-center bg-gray-700 p-3 rounded-lg">
                     <span class="font-medium text-lg">Gesamt Bar-Einnahmen:</span>
-                    <span id="overall-cash-total" class="text-xl font-bold text-green-400">0.00 Ä</span>
+                    <span id="overall-cash-total" class="text-xl font-bold text-green-400">0.00 ‚Ç¨</span>
                 </div>
                 <div class="flex justify-between items-center bg-gray-700 p-3 rounded-lg">
                     <span class="font-medium text-lg">Gesamt EC-Einnahmen:</span>
-                    <span id="overall-card-total" class="text-xl font-bold text-blue-400">0.00 Ä</span>
+                    <span id="overall-card-total" class="text-xl font-bold text-blue-400">0.00 ‚Ç¨</span>
                 </div>
                 <div class="flex justify-between items-center bg-gray-700 p-3 rounded-lg">
                     <span class="font-medium text-lg">Gesamt Trinkgeld:</span>
-                    <span id="overall-tip-total" class="text-xl font-bold text-purple-400">0.00 Ä</span>
+                    <span id="overall-tip-total" class="text-xl font-bold text-purple-400">0.00 ‚Ç¨</span>
                 </div>
                 <div class="flex justify-between items-center bg-yellow-500/20 border border-yellow-500 p-3 rounded-lg">
                     <span class="font-bold text-lg text-yellow-300">GESAMT FAHRPREIS:</span>
-                    <span id="overall-fare-grand-total" class="text-2xl font-bold text-yellow-400">0.00 Ä</span>
+                    <span id="overall-fare-grand-total" class="text-2xl font-bold text-yellow-400">0.00 ‚Ç¨</span>
                 </div>
             </div>
             
@@ -197,8 +197,8 @@
 
             <div class="flex justify-end gap-3 mt-6">
                  <button id="export-overall-pdf-btn" class="action-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2">PDF Export</button>
-                 <button id="clear-overall-data-btn" class="action-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2">Daten lˆschen</button>
-                 <button id="close-overall-summary-modal" class="action-btn bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-lg transition-colors">Schlieﬂen</button>
+                 <button id="clear-overall-data-btn" class="action-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2">Daten l√∂schen</button>
+                 <button id="close-overall-summary-modal" class="action-btn bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-lg transition-colors">Schlie√üen</button>
             </div>
         </div>
     </div>
@@ -234,7 +234,7 @@
             const confirmEndShiftBtn = document.getElementById('confirm-end-shift');
             const cancelEndShiftBtn = document.getElementById('cancel-end-shift');
             
-            // Elemente f¸r Gesamtabschluss
+            // Elemente f√ºr Gesamtabschluss
             const showOverallSummaryBtn = document.getElementById('show-overall-summary-btn');
             const overallSummaryModal = document.getElementById('overall-summary-modal');
             const closeOverallSummaryModal = document.getElementById('close-overall-summary-modal');
@@ -255,9 +255,9 @@
             // Initialisierung des Fahrernamens
             fahrernameInput.value = localStorage.getItem('fahrername') || '';
 
-            // --- HILFSFUNKTIONEN F‹R BERECHNUNGEN ---
+            // --- HILFSFUNKTIONEN F√úR BERECHNUNGEN ---
 
-            const formatCurrency = (amount) => parseFloat(amount).toFixed(2).replace('.', ',') + ' Ä';
+            const formatCurrency = (amount) => parseFloat(amount).toFixed(2).replace('.', ',') + ' ‚Ç¨';
 
             const calculateTrinkgeld = () => {
                 if (selectedPaymentMethod !== 'Bar') return;
@@ -317,7 +317,7 @@
                 }, { cashTotal: 0, cardTotal: 0, tipTotal: 0, fareGrandTotal: 0, bruttoGrandTotal: 0 }); 
             };
             
-            // --- FUNKTIONEN F‹R GESAMTABSCHLUSS ---
+            // --- FUNKTIONEN F√úR GESAMTABSCHLUSS ---
 
             const renderOverallSummary = () => {
                 const totals = calculateTotals(allCompletedShifts);
@@ -330,12 +330,12 @@
                 // NEU: Auflisten der abgeschlossenen Schichten
                 overallShiftList.innerHTML = '';
                 if (allCompletedShifts.length === 0) {
-                     overallSummaryShiftsCountEl.textContent = `‹bersicht ¸ber 0 abgeschlossene Schichten.`;
+                     overallSummaryShiftsCountEl.textContent = `√úbersicht √ºber 0 abgeschlossene Schichten.`;
                      overallShiftList.innerHTML = '<li class="text-gray-500">Keine Daten vorhanden.</li>';
                      return;
                 }
                 
-                overallSummaryShiftsCountEl.textContent = `‹bersicht ¸ber ${allCompletedShifts.length} abgeschlossene Schichten.`;
+                overallSummaryShiftsCountEl.textContent = `√úbersicht √ºber ${allCompletedShifts.length} abgeschlossene Schichten.`;
 
                 allCompletedShifts.forEach((shift, index) => {
                     const listItem = document.createElement('li');
@@ -354,7 +354,7 @@
 
             const exportOverallPDF = () => {
                 if (allCompletedShifts.length === 0) {
-                    alert("Keine abgeschlossenen Schichten f¸r den Export vorhanden.");
+                    alert("Keine abgeschlossenen Schichten f√ºr den Export vorhanden.");
                     return;
                 }
                 
@@ -391,8 +391,8 @@
                     }
                 });
 
-                // Detaillierte Schicht¸bersicht
-                doc.text("Detaillierte Schicht¸bersicht:", 14, doc.autoTable.previous.finalY + 10);
+                // Detaillierte Schicht√ºbersicht
+                doc.text("Detaillierte Schicht√ºbersicht:", 14, doc.autoTable.previous.finalY + 10);
                 
                 allCompletedShifts.forEach((shift, shiftIndex) => {
                     const shiftTotals = calculateTotals(shift.trips);
@@ -542,7 +542,7 @@
                 e.preventDefault();
 
                 if (!selectedPaymentMethod) {
-                    alert('Bitte w‰hlen Sie eine Zahlungsart aus.');
+                    alert('Bitte w√§hlen Sie eine Zahlungsart aus.');
                     return;
                 }
 
@@ -550,7 +550,7 @@
                 let tip = parseFloat(tipInput.value) || 0;
 
                 if (isNaN(fare) || fare <= 0) {
-                    alert('Bitte geben Sie einen g¸ltigen Fahrpreis ein.');
+                    alert('Bitte geben Sie einen g√ºltigen Fahrpreis ein.');
                     return;
                 }
 
@@ -559,7 +559,7 @@
                     tip = parseFloat(tipInput.value) || 0;
 
                     if (fare > 0 && (parseFloat(gegebenInput.value) || 0) <= 0) {
-                        alert('Bitte geben Sie einen Betrag bei "Gegeben" ein, wenn Barzahlung gew‰hlt wurde.');
+                        alert('Bitte geben Sie einen Betrag bei "Gegeben" ein, wenn Barzahlung gew√§hlt wurde.');
                         return;
                     }
                 }
@@ -583,10 +583,10 @@
                 fareInput.focus();
             });
 
-            // Schicht abschlieﬂen Logik
+            // Schicht abschlie√üen Logik
             endShiftBtn.addEventListener('click', () => {
                 if (trips.length === 0) {
-                    alert("Die aktuelle Schicht enth‰lt keine Fahrten. Es gibt nichts abzuschlieﬂen.");
+                    alert("Die aktuelle Schicht enth√§lt keine Fahrten. Es gibt nichts abzuschlie√üen.");
                     return;
                 }
                 confirmationModal.classList.add('visible');
@@ -596,4 +596,57 @@
                 const totals = calculateTotals(trips); 
                 const now = new Date().toLocaleString("de-DE");
                 
-                // Den Startzeitpunkt der Schicht von der ersten (‰ltesten) Fa
+                // Den Startzeitpunkt der Schicht von der ersten (√§ltesten) Fahrt nehmen
+                const firstTrip = trips.length > 0 ? trips.slice().sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))[0] : null;
+
+                // Formatierung des Datums/Uhrzeit-Strings f√ºr die klare Anzeige
+                let displayDate = 'Start unbekannt';
+                if (firstTrip) {
+                    const [date, time] = firstTrip.timestamp.split(', ');
+                    displayDate = `${date}, ${time.substring(0, 5)} Uhr`; // z.B. 13.10.2025, 08:30 Uhr
+                }
+
+                // F√ºge die abgeschlossene Schicht zum Speicher hinzu
+                allCompletedShifts.push({
+                    startDate: firstTrip ? firstTrip.timestamp : now, 
+                    endDate: now, 
+                    displayDate: displayDate, 
+                    totals: totals,
+                    trips: [...trips] 
+                });
+
+                // Setze die aktuelle Schicht zur√ºck
+                trips = [];
+                saveAndRender();
+                
+                confirmationModal.classList.remove('visible'); 
+            });
+            
+            // Logik f√ºr Gesamtabschluss
+            showOverallSummaryBtn.addEventListener('click', () => {
+                if (!Array.isArray(allCompletedShifts) || allCompletedShifts.length === 0) {
+                    alert("Es sind keine abgeschlossenen Schichten gespeichert.");
+                    return;
+                }
+                renderOverallSummary();
+                overallSummaryModal.classList.add('visible');
+            });
+
+            closeOverallSummaryModal.addEventListener('click', () => overallSummaryModal.classList.remove('visible'));
+            exportOverallPdfBtn.addEventListener('click', exportOverallPDF);
+            
+            clearOverallDataBtn.addEventListener('click', () => {
+                 if (confirm("WARNUNG: M√∂chten Sie WIRKLICH alle gespeicherten Schichten l√∂schen? Diese Aktion kann nicht r√ºckg√§ngig gemacht werden.")) {
+                    allCompletedShifts = [];
+                    saveAndRender();
+                    alert("Alle gespeicherten Schichten wurden gel√∂scht.");
+                    overallSummaryModal.classList.remove('visible');
+                 }
+            });
+
+            // Initialer Aufruf zum Laden der Daten beim Start
+            saveAndRender();
+        });
+    </script>
+</body>
+</html>
