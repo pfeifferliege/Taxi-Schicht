@@ -11,38 +11,74 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.27/jspdf.plugin.autotable.min.js"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; touch-action: manipulation; }
-        .btn-primary { transition: all 0.2s ease-in-out; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-        .summary-card { transition: transform 0.2s ease-in-out; }
-        .summary-card:hover { transform: scale(1.02); }
-        .action-btn { transition: all 0.2s ease-in-out; }
-        .action-btn:hover { transform: translateY(-1px); }
-        .cash-input-group { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out; opacity: 0; }
-        .cash-input-group.visible { max-height: 500px; opacity: 1; }
-        .modal { position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.7); display: none; align-items: center; justify-content: center; z-index: 50; }
-        .modal.visible { display: flex; }
+        body {
+            font-family: 'Inter', sans-serif;
+            touch-action: manipulation; /* Improves touch responsiveness */
+        }
+        .btn-primary {
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .summary-card {
+            transition: transform 0.2s ease-in-out;
+        }
+        .summary-card:hover {
+            transform: scale(1.02);
+        }
+        .action-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .action-btn:hover {
+            transform: translateY(-1px);
+        }
+        .cash-input-group {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out;
+            opacity: 0;
+        }
+        .cash-input-group.visible {
+            max-height: 500px; /* Adjust as needed */
+            opacity: 1;
+        }
+        /* Style für das Modal */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none; /* Initial versteckt */
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+        }
+        .modal.visible {
+            display: flex;
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white min-h-screen flex flex-col items-center p-4 sm:p-6">
     <div class="w-full max-w-2xl mx-auto">
         <header class="text-center mb-6">
             <h1 class="text-4xl font-bold text-yellow-400">Taxi-Schichtrechner</h1>
-            <p class="text-gray-400 mt-2">Ihre Daten sind sicher gespeichert und griffbereit.</p>
+            <p class="text-gray-400 mt-2">Erfassen Sie Ihre Fahrten und sehen Sie Ihre Einnahmen auf einen Blick.</p>
         </header>
 
-        <div class="bg-gray-800 p-4 rounded-2xl shadow-lg mb-6 border-b-2 border-yellow-500">
-             <label for="fahrername" class="block text-sm font-medium text-gray-300 mb-1">Fahrername (wird dauerhaft gespeichert)</label>
-             <input type="text" id="fahrername" placeholder="Ihr Name" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
+        <div class="bg-gray-800 p-4 rounded-2xl shadow-lg mb-6">
+             <label for="fahrername" class="block text-sm font-medium text-gray-300 mb-1">Fahrername</label>
+             <input type="text" id="fahrername" placeholder="Ihr Name für den Export" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
         </div>
 
         <div class="bg-gray-800 p-6 rounded-2xl shadow-lg mb-8">
-            <h2 id="form-title" class="text-2xl font-semibold mb-4 text-center">Neue Fahrt hinzufügen</h2>
+            <h2 class="text-2xl font-semibold mb-4 text-center">Neue Fahrt hinzufügen</h2>
             <form id="trip-form" class="space-y-4">
                 
+                <!-- 1. Auswahl der Zahlungsart (Initial sichtbar) -->
                 <div id="payment-method-selection" class="space-y-4">
                     <div>
-                        <span class="block text-sm font-medium text-gray-300 mb-2">Zahlungsart wählen</span>
+                        <span class="block text-sm font-medium text-gray-300 mb-2">Zahlungsart</span>
                         <div class="grid grid-cols-2 gap-4">
                             <button type="button" data-method="Bar" class="payment-method-btn bg-gray-700 border-2 border-transparent text-white font-semibold py-3 rounded-lg transition-all duration-200">Bar</button>
                             <button type="button" data-method="EC" class="payment-method-btn bg-gray-700 border-2 border-transparent text-white font-semibold py-3 rounded-lg transition-all duration-200">EC-Karte</button>
@@ -50,39 +86,37 @@
                     </div>
                 </div>
 
+                <!-- 2. Eingabefelder (Initial versteckt) -->
                 <div id="trip-input-fields" class="space-y-4 hidden">
+                    
                     <div>
-                        <label for="fare" class="block text-sm font-medium text-gray-300 mb-1">Fahrpreis (€)</label>
-                        <input type="number" id="fare" step="0.01" min="0" placeholder="0.00" required class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
+                        <label for="fare" class="block text-sm font-medium text-gray-300 mb-1">Summe / Fahrpreis (€)</label>
+                        <input type="number" id="fare" step="0.01" min="0" placeholder="z.B. 15.50" required class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
                     </div>
 
                      <div id="cash-input-group" class="space-y-4 cash-input-group">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label for="gegeben" class="block text-sm font-medium text-gray-300 mb-1">Gegeben (€)</label>
-                                <input type="number" id="gegeben" step="0.01" min="0" placeholder="0.00" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                            </div>
-                            <div>
-                                <label for="rueckgeldTats" class="block text-sm font-medium text-gray-300 mb-1">Rückgeld tats. (€)</label>
-                                <input type="number" id="rueckgeldTats" step="0.01" min="0" placeholder="0.00" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                            </div>
+                        <div>
+                            <label for="gegeben" class="block text-sm font-medium text-gray-300 mb-1">Gegeben (€)</label>
+                            <input type="number" id="gegeben" step="0.01" min="0" placeholder="z.B. 20.00" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-1">Soll-Rückgeld (Info)</label>
-                            <input type="number" id="rueckgeld" readonly class="w-full bg-gray-600 border border-gray-500 rounded-lg p-3 text-gray-300 cursor-not-allowed">
+                            <label for="rueckgeld" class="block text-sm font-medium text-gray-300 mb-1">Rückgeld (berechnet)</label>
+                            <input type="number" id="rueckgeld" placeholder="Wird berechnet" readonly class="w-full bg-gray-600 border border-gray-500 rounded-lg p-3 text-white cursor-not-allowed">
+                        </div>
+
+                         <div>
+                            <label for="rueckgeldTats" class="block text-sm font-medium text-gray-300 mb-1">Rückgeld (tatsächlich)</label>
+                            <input type="number" id="rueckgeldTats" step="0.01" min="0" placeholder="z.B. 18.00" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
                         </div>
                     </div>
 
                     <div>
                         <label for="tip" class="block text-sm font-medium text-gray-300 mb-1">Trinkgeld (€)</label>
-                        <input type="number" id="tip" step="0.01" min="0" placeholder="Trinkgeld" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
+                        <input type="number" id="tip" step="0.01" min="0" placeholder="Wird bei Barzahlung berechnet" class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
                     </div>
 
-                    <button type="submit" id="submit-btn" class="w-full btn-primary bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 rounded-lg shadow-md text-lg uppercase tracking-wider">
-                        Hinzufügen
-                    </button>
-                    <button type="button" id="cancel-edit-btn" class="w-full hidden bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 rounded-lg mt-2 transition">
-                        Abbrechen
+                    <button type="submit" class="w-full btn-primary bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 rounded-lg shadow-md text-lg">
+                        Berechnen
                     </button>
                 </div>
             </form>
@@ -90,22 +124,22 @@
 
         <div class="mb-8">
             <h2 class="text-2xl font-semibold mb-4 text-center">Aktuelle Schicht</h2>
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="summary-card bg-green-500/20 border border-green-500 p-4 rounded-xl text-center">
-                    <h3 class="text-xs font-medium text-green-300 uppercase">Bar</h3>
-                    <p id="cash-total" class="text-2xl font-bold">0.00 €</p>
+                    <h3 class="text-sm font-medium text-green-300 uppercase">Bar-Einnahmen</h3>
+                    <p id="cash-total" class="text-3xl font-bold text-white">0.00 €</p>
                 </div>
                 <div class="summary-card bg-blue-500/20 border border-blue-500 p-4 rounded-xl text-center">
-                    <h3 class="text-xs font-medium text-blue-300 uppercase">EC</h3>
-                    <p id="card-total" class="text-2xl font-bold">0.00 €</p>
+                    <h3 class="text-sm font-medium text-blue-300 uppercase">EC-Einnahmen</h3>
+                    <p id="card-total" class="text-3xl font-bold text-white">0.00 €</p>
                 </div>
                 <div class="summary-card bg-purple-500/20 border border-purple-500 p-4 rounded-xl text-center">
-                    <h3 class="text-xs font-medium text-purple-300 uppercase">Tip</h3>
-                    <p id="tip-total" class="text-2xl font-bold">0.00 €</p>
+                    <h3 class="text-sm font-medium text-purple-300 uppercase">Gesamt Trinkgeld</h3>
+                    <p id="tip-total" class="text-3xl font-bold text-white">0.00 €</p>
                 </div>
                 <div class="summary-card bg-yellow-500/20 border border-yellow-500 p-4 rounded-xl text-center">
-                    <h3 class="text-xs font-medium text-yellow-300 uppercase">Gesamt</h3>
-                    <p id="fare-grand-total" class="text-2xl font-bold">0.00 €</p>
+                    <h3 class="text-sm font-medium text-yellow-300 uppercase">Gesamt Fahrpreis</h3>
+                    <p id="fare-grand-total" class="text-3xl font-bold text-white">0.00 €</p>
                 </div>
             </div>
         </div>
@@ -113,32 +147,82 @@
         <div class="bg-gray-800 p-6 rounded-2xl shadow-lg">
              <div class="flex flex-wrap justify-end items-center mb-4 gap-3">
                 <h2 class="text-2xl font-semibold mr-auto">Protokoll</h2>
-                <div class="flex items-center gap-2">
-                    <button id="end-shift-btn" class="action-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-lg flex items-center gap-2 text-sm">
-                        Abschließen
+                <div class="flex items-center gap-2 flex-wrap">
+                    
+                    <!-- Button Abschließen -->
+                    <button id="end-shift-btn" class="action-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-lg flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" /></svg> Abschließen
                     </button>
-                    <button id="show-overall-summary-btn" class="action-btn bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-3 rounded-lg flex items-center gap-2 text-sm">
-                        Historie
+                    <!-- Button für den Gesamtabschluss -->
+                    <button id="show-overall-summary-btn" class="action-btn bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-3 rounded-lg flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v5a1 1 0 001 1h2a1 1 0 100-2h-1V7z" clip-rule="evenodd" /></svg> Gesamt
                     </button>
                 </div>
             </div>
             <div id="trips-list" class="space-y-3 max-h-96 overflow-y-auto pr-2">
-                <p id="no-trips-message" class="text-gray-400 text-center py-4">Keine Fahrten vorhanden.</p>
+                <p id="no-trips-message" class="text-gray-400 text-center py-4">Noch keine Fahrten für diese Schicht erfasst.</p>
             </div>
         </div>
     </div>
 
+    <!-- Modal für Schichtabschließen (Bestätigung) -->
     <div id="confirmation-modal" class="modal p-4">
         <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center">
-            <h3 class="text-xl font-bold mb-4">Schicht abschließen?</h3>
+            <h3 class="text-xl font-bold mb-4">Schicht wirklich abschließen?</h3>
+            <p class="text-gray-400 mb-6">Die aktuelle Schicht wird gespeichert. Alle erfassten Fahrten werden aus dem Protokoll gelöscht, um eine neue Schicht zu starten.</p>
             <div class="flex justify-center gap-4">
-                <button id="confirm-end-shift" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg">Ja</button>
-                <button id="cancel-end-shift" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg">Nein</button>
+                <button id="confirm-end-shift" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg transition-colors">Ja, abschließen</button>
+                <button id="cancel-end-shift" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg transition-colors">Abbrechen</button>
             </div>
         </div>
     </div>
 
+    <!-- MODAL für den Gesamtabschluss -->
+    <div id="overall-summary-modal" class="modal p-4">
+        <!-- Scrollbarkeit auf Containerebene hinzugefügt -->
+        <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-lg w-full max-h-full overflow-y-auto">
+            <h3 class="text-2xl font-bold mb-6 text-yellow-400">Gesamtabschluss</h3>
+            <p id="overall-summary-shifts-count" class="text-gray-400 mb-4"></p>
+            
+            <div class="space-y-3 mb-6">
+                <div class="flex justify-between items-center bg-gray-700 p-3 rounded-lg">
+                    <span class="font-medium text-lg">Gesamt Bar-Einnahmen:</span>
+                    <span id="overall-cash-total" class="text-xl font-bold text-green-400">0.00 €</span>
+                </div>
+                <div class="flex justify-between items-center bg-gray-700 p-3 rounded-lg">
+                    <span class="font-medium text-lg">Gesamt EC-Einnahmen:</span>
+                    <span id="overall-card-total" class="text-xl font-bold text-blue-400">0.00 €</span>
+                </div>
+                <div class="flex justify-between items-center bg-gray-700 p-3 rounded-lg">
+                    <span class="font-medium text-lg">Gesamt Trinkgeld:</span>
+                    <span id="overall-tip-total" class="text-xl font-bold text-purple-400">0.00 €</span>
+                </div>
+                <div class="flex justify-between items-center bg-yellow-500/20 border border-yellow-500 p-3 rounded-lg">
+                    <span class="font-bold text-lg text-yellow-300">GESAMT FAHRPREIS:</span>
+                    <span id="overall-fare-grand-total" class="text-2xl font-bold text-yellow-400">0.00 €</span>
+                </div>
+            </div>
+            
+            <!-- Liste der abgeschlossenen Schichten -->
+            <div class="mt-6 border-t border-gray-700 pt-4">
+                 <h4 class="text-lg font-semibold mb-2">Abgeschlossene Schichten:</h4>
+                 <ul id="overall-shift-list" class="space-y-2 max-h-40 overflow-y-auto pr-2">
+                     <!-- Schichten werden hier durch JS eingefügt -->
+                 </ul>
+            </div>
+
+            <div class="flex justify-end gap-3 mt-6">
+                 <button id="export-overall-pdf-btn" class="action-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2">PDF Export</button>
+                 <button id="clear-overall-data-btn" class="action-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg flex items-center gap-2">Daten löschen</button>
+                 <button id="close-overall-summary-modal" class="action-btn bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-lg transition-colors">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+
     <script>
+        const { jsPDF } = window.jspdf;
+
         document.addEventListener('DOMContentLoaded', () => {
             const fahrernameInput = document.getElementById('fahrername');
             const tripForm = document.getElementById('trip-form');
@@ -147,166 +231,457 @@
             const paymentMethodButtons = document.querySelectorAll('.payment-method-btn');
             const tripsList = document.getElementById('trips-list');
             const noTripsMessage = document.getElementById('no-trips-message');
-            const formTitle = document.getElementById('form-title');
-            const submitBtn = document.getElementById('submit-btn');
-            const cancelEditBtn = document.getElementById('cancel-edit-btn');
+
+            // NEUE ELEMENTE FÜR DIE SICHTBARKEITSSTEUERUNG
             const paymentMethodSelection = document.getElementById('payment-method-selection');
             const tripInputFields = document.getElementById('trip-input-fields');
+
+            // Cash inputs
             const cashInputGroup = document.getElementById('cash-input-group');
             const gegebenInput = document.getElementById('gegeben');
             const rueckgeldInput = document.getElementById('rueckgeld');
             const rueckgeldTatsInput = document.getElementById('rueckgeldTats');
 
+            // Summary elements
+            const cashTotalEl = document.getElementById('cash-total');
+            const cardTotalEl = document.getElementById('card-total');
+            const tipTotalEl = document.getElementById('tip-total');
+            const fareGrandTotalEl = document.getElementById('fare-grand-total'); 
+
+            // Action buttons & Modals
+            const endShiftBtn = document.getElementById('end-shift-btn');
+            const confirmationModal = document.getElementById('confirmation-modal');
+            const confirmEndShiftBtn = document.getElementById('confirm-end-shift');
+            const cancelEndShiftBtn = document.getElementById('cancel-end-shift');
+            
+            // Elemente für Gesamtabschluss
+            const showOverallSummaryBtn = document.getElementById('show-overall-summary-btn');
+            const overallSummaryModal = document.getElementById('overall-summary-modal');
+            const closeOverallSummaryModal = document.getElementById('close-overall-summary-modal');
+            const exportOverallPdfBtn = document.getElementById('export-overall-pdf-btn');
+            const clearOverallDataBtn = document.getElementById('clear-overall-data-btn');
+            const overallCashTotalEl = document.getElementById('overall-cash-total');
+            const overallCardTotalEl = document.getElementById('overall-card-total');
+            const overallTipTotalEl = document.getElementById('overall-tip-total');
+            const overallFareGrandTotalEl = document.getElementById('overall-fare-grand-total');
+            const overallSummaryShiftsCountEl = document.getElementById('overall-summary-shifts-count');
+            const overallShiftList = document.getElementById('overall-shift-list');
+
+            // State variables
             let trips = JSON.parse(localStorage.getItem('taxiShiftData')) || [];
             let allCompletedShifts = JSON.parse(localStorage.getItem('allCompletedShifts')) || [];
             let selectedPaymentMethod = '';
-            let editIndex = -1;
 
-            // Name dauerhaft laden
+            // Initialisierung des Fahrernamens
             fahrernameInput.value = localStorage.getItem('fahrername') || '';
-            fahrernameInput.addEventListener('input', () => {
-                localStorage.setItem('fahrername', fahrernameInput.value);
-            });
+
+            // --- HILFSFUNKTIONEN FÜR BERECHNUNGEN ---
 
             const formatCurrency = (amount) => parseFloat(amount).toFixed(2).replace('.', ',') + ' €';
 
-            const calculateAll = () => {
-                const fare = parseFloat(fareInput.value) || 0;
-                const geg = parseFloat(gegebenInput.value) || 0;
-                const tats = parseFloat(rueckgeldTatsInput.value) || 0;
-                
-                if (geg > 0 && geg >= fare) {
-                    rueckgeldInput.value = (geg - fare).toFixed(2);
-                    if (selectedPaymentMethod === 'Bar') {
-                        tipInput.value = Math.max(0, geg - fare - tats).toFixed(2);
-                    }
+            const calculateTrinkgeld = () => {
+                if (selectedPaymentMethod !== 'Bar') return;
+
+                const summe = parseFloat(fareInput.value) || 0;
+                const gegeben = parseFloat(gegebenInput.value) || 0;
+                const rueckgeldTats = parseFloat(rueckgeldTatsInput.value) || 0;
+
+                let calculatedTip = 0;
+
+                if (summe > 0 && gegeben >= summe) {
+                    calculatedTip = gegeben - summe - rueckgeldTats;
+                    calculatedTip = Math.max(0, calculatedTip);
+
+                    tipInput.value = calculatedTip.toFixed(2);
+                } else {
+                     tipInput.value = '';
                 }
             };
 
-            const renderTrips = () => {
-                let cash = 0, card = 0, tips = 0;
-                tripsList.innerHTML = '';
+            const calculateRueckgeld = () => {
+                const summe = parseFloat(fareInput.value) || 0;
+                const gegeben = parseFloat(gegebenInput.value) || 0;
+
+                if (gegeben > 0 && gegeben >= summe) {
+                    const rueckgeld = gegeben - summe;
+                    rueckgeldInput.value = rueckgeld.toFixed(2);
+                } else {
+                    rueckgeldInput.value = '';
+                }
+
+                calculateTrinkgeld();
+            };
+
+            const calculateTotals = (data) => {
+                const dataToProcess = Array.isArray(data) && data.length > 0 && data[0].hasOwnProperty('method')
+                    ? data 
+                    : (Array.isArray(data) && data.length > 0 && data[0].hasOwnProperty('trips')
+                        ? data.map(shift => shift.trips).flat() 
+                        : trips); 
+
+                return dataToProcess.reduce((acc, trip) => {
+                    const fare = parseFloat(trip.fare) || 0;
+                    const tip = parseFloat(trip.tip) || 0;
+
+                    if (trip.method === 'Bar') {
+                        acc.cashTotal += fare;
+                    } else if (trip.method === 'EC') {
+                        acc.cardTotal += fare;
+                    }
+                    acc.tipTotal += tip;
+                    
+                    acc.fareGrandTotal = acc.cashTotal + acc.cardTotal; 
+                    acc.bruttoGrandTotal = acc.fareGrandTotal + acc.tipTotal;
+
+                    return acc;
+                }, { cashTotal: 0, cardTotal: 0, tipTotal: 0, fareGrandTotal: 0, bruttoGrandTotal: 0 }); 
+            };
+            
+            // --- FUNKTIONEN FÜR GESAMTABSCHLUSS ---
+
+            const renderOverallSummary = () => {
+                const totals = calculateTotals(allCompletedShifts);
                 
+                overallCashTotalEl.textContent = formatCurrency(totals.cashTotal);
+                overallCardTotalEl.textContent = formatCurrency(totals.cardTotal);
+                overallTipTotalEl.textContent = formatCurrency(totals.tipTotal);
+                overallFareGrandTotalEl.textContent = formatCurrency(totals.fareGrandTotal);
+
+                // NEU: Auflisten der abgeschlossenen Schichten
+                overallShiftList.innerHTML = '';
+                if (allCompletedShifts.length === 0) {
+                     overallSummaryShiftsCountEl.textContent = `Übersicht über 0 abgeschlossene Schichten.`;
+                     overallShiftList.innerHTML = '<li class="text-gray-500">Keine Daten vorhanden.</li>';
+                     return;
+                }
+                
+                overallSummaryShiftsCountEl.textContent = `Übersicht über ${allCompletedShifts.length} abgeschlossene Schichten.`;
+
+                allCompletedShifts.forEach((shift, index) => {
+                    const listItem = document.createElement('li');
+                    const shiftTotals = calculateTotals(shift.trips);
+                    listItem.className = 'flex justify-between items-center text-sm p-2 rounded bg-gray-700/50';
+                    
+                    const shiftName = shift.displayDate || `Schicht ${index + 1}`; 
+                    
+                    listItem.innerHTML = `
+                        <span class="font-semibold text-yellow-300">Schicht ${index + 1}: ${shiftName}</span>
+                        <span class="text-right text-white">${formatCurrency(shiftTotals.fareGrandTotal)}</span>
+                    `;
+                    overallShiftList.appendChild(listItem);
+                });
+            };
+
+            const exportOverallPDF = () => {
+                if (allCompletedShifts.length === 0) {
+                    alert("Keine abgeschlossenen Schichten für den Export vorhanden.");
+                    return;
+                }
+                
+                const doc = new jsPDF();
+                const driverName = fahrernameInput.value || 'Unbekannter Fahrer';
+                const date = new Date().toLocaleDateString('de-DE');
+                const totals = calculateTotals(allCompletedShifts);
+                
+                // Header
+                doc.setFontSize(18);
+                doc.text("Taxi Gesamtabschluss", 14, 22);
+                doc.setFontSize(10);
+                doc.text(`Fahrer: ${driverName}`, 14, 28);
+                doc.text(`Datum des Gesamtabschlusses: ${date}`, 14, 33);
+                doc.text(`Anzahl Schichten: ${allCompletedShifts.length}`, 14, 38);
+
+                // Summary Table
+                doc.autoTable({
+                    startY: 45,
+                    head: [['Kategorie', 'Betrag']],
+                    body: [
+                        ['Gesamt Bar-Einnahmen (Fahrpreis)', formatCurrency(totals.cashTotal)],
+                        ['Gesamt EC-Einnahmen (Fahrpreis)', formatCurrency(totals.cardTotal)],
+                        ['GESAMT FAHRPREIS', formatCurrency(totals.fareGrandTotal)], 
+                        ['Gesamt Trinkgeld', formatCurrency(totals.tipTotal)],
+                        ['BRUTTO GESAMTEINNAHMEN', formatCurrency(totals.bruttoGrandTotal)], 
+                    ],
+                    styles: { fontSize: 10 },
+                    headStyles: { fillColor: [255, 193, 7] },
+                    footStyles: { fillColor: [52, 58, 64], textColor: [255, 255, 255] },
+                    theme: 'striped',
+                    columnStyles: {
+                        1: { halign: 'right' }
+                    }
+                });
+
+                // Detaillierte Schichtübersicht
+                doc.text("Detaillierte Schichtübersicht:", 14, doc.autoTable.previous.finalY + 10);
+                
+                allCompletedShifts.forEach((shift, shiftIndex) => {
+                    const shiftTotals = calculateTotals(shift.trips);
+                    
+                    const [endDate, endTime] = shift.endDate.split(', ');
+                    const endTimeShort = endTime.substring(0, 5); 
+
+                    const shiftBody = [
+                         [`Ende: ${endDate}, ${endTimeShort} Uhr`],
+                         ['Bar Fahrpreis', formatCurrency(shiftTotals.cashTotal)],
+                         ['EC Fahrpreis', formatCurrency(shiftTotals.cardTotal)],
+                         ['Trinkgeld', formatCurrency(shiftTotals.tipTotal)],
+                         ['Schicht Gesamt Fahrpreis', formatCurrency(shiftTotals.fareGrandTotal)],
+                    ];
+                    
+                    doc.autoTable({
+                        startY: doc.autoTable.previous.finalY + 5,
+                        head: [[`Schicht ${shiftIndex + 1}: ${shift.displayDate}`,'Einnahmen']],
+                        body: shiftBody,
+                        styles: { fontSize: 8 },
+                        headStyles: { fillColor: [52, 58, 64], textColor: [255, 255, 255] },
+                        theme: 'grid',
+                        columnStyles: {
+                            1: { halign: 'right' }
+                        }
+                    });
+                });
+
+                doc.save(`TaxiGesamtabschluss_${driverName}_${date}.pdf`);
+            };
+
+            // --- RENDER & SAVE FUNKTIONEN ---
+
+            const renderTrips = () => {
+                const totals = calculateTotals(trips);
+
+                // Update Summary
+                cashTotalEl.textContent = formatCurrency(totals.cashTotal);
+                cardTotalEl.textContent = formatCurrency(totals.cardTotal);
+                tipTotalEl.textContent = formatCurrency(totals.tipTotal);
+                fareGrandTotalEl.textContent = formatCurrency(totals.fareGrandTotal);
+                
+                // Update List
+                tripsList.innerHTML = '';
                 if (trips.length === 0) {
                     noTripsMessage.classList.remove('hidden');
                     tripsList.appendChild(noTripsMessage);
                 } else {
                     noTripsMessage.classList.add('hidden');
-                    [...trips].reverse().forEach((trip, revIdx) => {
-                        const idx = trips.length - 1 - revIdx;
-                        const tFare = parseFloat(trip.fare);
-                        const tTip = parseFloat(trip.tip);
-                        
-                        if(trip.method === 'Bar') cash += tFare; else card += tFare;
-                        tips += tTip;
+                    
+                    const sortedTrips = [...trips].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                    
+                    sortedTrips.forEach((trip) => {
+                        const listItem = document.createElement('div');
+                        listItem.className = 'flex justify-between items-center bg-gray-700 p-3 rounded-lg shadow';
 
-                        const item = document.createElement('div');
-                        item.className = `flex justify-between items-center bg-gray-700 p-3 rounded-lg shadow border-l-4 ${trip.method === 'Bar' ? 'border-green-500' : 'border-blue-500'}`;
-                        item.innerHTML = `
-                            <div>
-                                <span class="font-bold text-lg">#${idx + 1} | ${formatCurrency(tFare)}</span>
-                                <div class="text-xs text-gray-400">${trip.timestamp} | Tip: ${formatCurrency(tTip)}</div>
+                        const methodColor = trip.method === 'Bar' ? 'text-green-400' : 'text-blue-400';
+                        const tripTip = parseFloat(trip.tip) || 0;
+                        
+                        const originalIndex = trips.findIndex(t => t === trip);
+                        const tripNumber = originalIndex + 1; 
+
+                        const [date, time] = trip.timestamp.split(', ');
+
+                        listItem.innerHTML = `
+                            <div class="flex flex-col">
+                                <span class="text-lg font-semibold text-white">#${tripNumber} | ${formatCurrency(parseFloat(trip.fare) || 0)}</span>
+                                <span class="text-xs text-gray-400">${date}, ${time}</span>
+                                <span class="text-xs text-gray-400">Trinkgeld: ${formatCurrency(tripTip)}</span>
                             </div>
-                            <div class="flex gap-2">
-                                <button onclick="window.editTrip(${idx})" class="p-2 text-yellow-400 hover:bg-yellow-400/10 rounded">✎</button>
-                                <button onclick="window.deleteTrip(${idx})" class="p-2 text-red-400 hover:bg-red-400/10 rounded">✕</button>
-                            </div>`;
-                        tripsList.appendChild(item);
+                            <div class="flex items-center gap-3">
+                                <span class="${methodColor} font-medium">${trip.method}</span>
+                                <button data-index="${originalIndex}" class="delete-trip-btn text-red-400 hover:text-red-500 transition">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 7a1 1 0 012 0v8a1 1 0 11-2 0V7zm4 0a1 1 0 10-2 0v8a1 1 0 102 0V7z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
+                        `;
+                        tripsList.appendChild(listItem);
+                    });
+
+                    document.querySelectorAll('.delete-trip-btn').forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            const index = parseInt(e.currentTarget.dataset.index);
+                            trips.splice(index, 1);
+                            saveAndRender();
+                        });
                     });
                 }
-                document.getElementById('cash-total').textContent = formatCurrency(cash);
-                document.getElementById('card-total').textContent = formatCurrency(card);
-                document.getElementById('tip-total').textContent = formatCurrency(tips);
-                document.getElementById('fare-grand-total').textContent = formatCurrency(cash + card);
             };
 
-            window.editTrip = (idx) => {
-                editIndex = idx;
-                const t = trips[idx];
-                selectedPaymentMethod = t.method;
-                fareInput.value = t.fare;
-                tipInput.value = t.tip;
-                formTitle.textContent = "Fahrt #" + (idx + 1) + " bearbeiten";
-                submitBtn.textContent = "Speichern";
-                cancelEditBtn.classList.remove('hidden');
-                paymentMethodSelection.classList.add('hidden');
-                tripInputFields.classList.remove('hidden');
-                if (t.method === 'Bar') { cashInputGroup.classList.add('visible'); tipInput.readOnly = true; }
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            };
-
-            window.deleteTrip = (idx) => { if(confirm("Löschen?")) { trips.splice(idx, 1); save(); } };
-
-            const save = () => {
+            const saveAndRender = () => {
                 localStorage.setItem('taxiShiftData', JSON.stringify(trips));
+                localStorage.setItem('allCompletedShifts', JSON.stringify(allCompletedShifts));
                 renderTrips();
             };
-
-            const resetForm = () => {
-                editIndex = -1;
-                formTitle.textContent = "Neue Fahrt hinzufügen";
-                submitBtn.textContent = "Hinzufügen";
-                cancelEditBtn.classList.add('hidden');
-                tripForm.reset();
-                paymentMethodSelection.classList.remove('hidden');
-                tripInputFields.classList.add('hidden');
-                cashInputGroup.classList.remove('visible');
-                paymentMethodButtons.forEach(b => b.classList.remove('bg-yellow-500', 'text-gray-900'));
+            
+            // Funktion zum Zurücksetzen der Auswahlbuttons
+            const resetPaymentSelection = () => {
+                 paymentMethodButtons.forEach(btn => {
+                    btn.classList.remove('bg-yellow-500', 'border-yellow-500', 'text-gray-900');
+                    btn.classList.add('bg-gray-700', 'border-transparent');
+                });
             };
 
-            paymentMethodButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    selectedPaymentMethod = btn.dataset.method;
+            // --- EVENT LISTENER ---
+
+            fahrernameInput.addEventListener('input', () => {
+                localStorage.setItem('fahrername', fahrernameInput.value);
+            });
+
+            paymentMethodButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault(); 
+
+                    resetPaymentSelection();
+                    
+                    // Button stylen
+                    button.classList.add('bg-yellow-500', 'border-yellow-500', 'text-gray-900');
+                    selectedPaymentMethod = button.dataset.method;
+                    
+                    // Sichtbarkeit umschalten
                     paymentMethodSelection.classList.add('hidden');
                     tripInputFields.classList.remove('hidden');
+
+                    // Bar/EC spezifische Logik
                     if (selectedPaymentMethod === 'Bar') {
                         cashInputGroup.classList.add('visible');
                         tipInput.readOnly = true;
-                        tipInput.classList.add('bg-gray-600');
-                    } else {
+                        tipInput.placeholder = "Wird berechnet";
+                        tipInput.classList.add('bg-gray-600', 'cursor-not-allowed');
+                        tipInput.classList.remove('bg-gray-700');
+                    } else { // EC
                         cashInputGroup.classList.remove('visible');
                         tipInput.readOnly = false;
-                        tipInput.classList.remove('bg-gray-600');
+                        tipInput.placeholder = "z.B. 2.00";
+                        tipInput.classList.remove('bg-gray-600', 'cursor-not-allowed');
+                        tipInput.classList.add('bg-gray-700');
+                        tipInput.value = ''; 
+
+                        gegebenInput.value = '';
+                        rueckgeldInput.value = '';
+                        rueckgeldTatsInput.value = '';
                     }
                     fareInput.focus();
                 });
             });
 
-            fareInput.addEventListener('input', calculateAll);
-            gegebenInput.addEventListener('input', calculateAll);
-            rueckgeldTatsInput.addEventListener('input', calculateAll);
-            cancelEditBtn.addEventListener('click', resetForm);
+            fareInput.addEventListener('input', () => {
+                if (selectedPaymentMethod !== 'EC') {
+                    calculateRueckgeld();
+                }
+            });
+            gegebenInput.addEventListener('input', calculateRueckgeld);
+            rueckgeldTatsInput.addEventListener('input', calculateTrinkgeld);
 
             tripForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                const nt = {
-                    fare: parseFloat(fareInput.value).toFixed(2),
-                    tip: (parseFloat(tipInput.value) || 0).toFixed(2),
+
+                if (!selectedPaymentMethod) {
+                    alert('Interner Fehler: Zahlungsart nicht ausgewählt.');
+                    return;
+                }
+
+                const fare = parseFloat(fareInput.value);
+                let tip = parseFloat(tipInput.value) || 0;
+
+                if (isNaN(fare) || fare <= 0) {
+                    alert('Bitte geben Sie einen gültigen Fahrpreis ein.');
+                    return;
+                }
+
+                if (selectedPaymentMethod === 'Bar') {
+                    calculateTrinkgeld(); 
+                    tip = parseFloat(tipInput.value) || 0;
+
+                    if (fare > 0 && (parseFloat(gegebenInput.value) || 0) <= 0) {
+                        alert('Bitte geben Sie einen Betrag bei "Gegeben" ein, wenn Barzahlung gewählt wurde.');
+                        return;
+                    }
+                }
+
+                trips.push({
+                    fare: fare.toFixed(2),
+                    tip: tip.toFixed(2),
                     method: selectedPaymentMethod,
-                    timestamp: editIndex > -1 ? trips[editIndex].timestamp : new Date().toLocaleString("de-DE")
-                };
-                if (editIndex > -1) trips[editIndex] = nt; else trips.push(nt);
-                save();
-                resetForm();
+                    timestamp: new Date().toLocaleString("de-DE")
+                });
+
+                saveAndRender();
+
+                // Reset form fields
+                fareInput.value = '';
+                tipInput.value = '';
+                gegebenInput.value = '';
+                rueckgeldInput.value = '';
+                rueckgeldTatsInput.value = '';
+                
+                // Sichtbarkeit umschalten und Zustand zurücksetzen
+                tripInputFields.classList.add('hidden');
+                paymentMethodSelection.classList.remove('hidden');
+                resetPaymentSelection();
+                selectedPaymentMethod = '';
             });
 
-            document.getElementById('end-shift-btn').addEventListener('click', () => {
-                if(trips.length > 0) document.getElementById('confirmation-modal').classList.add('visible');
+            // Schicht abschließen Logik
+            endShiftBtn.addEventListener('click', () => {
+                if (trips.length === 0) {
+                    alert("Die aktuelle Schicht enthält keine Fahrten. Es gibt nichts abzuschließen.");
+                    return;
+                }
+                confirmationModal.classList.add('visible');
+            });
+            cancelEndShiftBtn.addEventListener('click', () => confirmationModal.classList.remove('visible'));
+            confirmEndShiftBtn.addEventListener('click', () => {
+                const totals = calculateTotals(trips); 
+                const now = new Date().toLocaleString("de-DE");
+                
+                // Den Startzeitpunkt der Schicht von der ersten (ältesten) Fahrt nehmen
+                const firstTrip = trips.length > 0 ? trips.slice().sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))[0] : null;
+
+                // Formatierung des Datums/Uhrzeit-Strings für die klare Anzeige
+                let displayDate = 'Start unbekannt';
+                if (firstTrip) {
+                    const [date, time] = firstTrip.timestamp.split(', ');
+                    displayDate = `${date}, ${time.substring(0, 5)} Uhr`; // z.B. 13.10.2025, 08:30 Uhr
+                }
+
+                // Füge die abgeschlossene Schicht zum Speicher hinzu
+                allCompletedShifts.push({
+                    startDate: firstTrip ? firstTrip.timestamp : now, 
+                    endDate: now, 
+                    displayDate: displayDate, 
+                    totals: totals,
+                    trips: [...trips] 
+                });
+
+                // Setze die aktuelle Schicht zurück
+                trips = [];
+                saveAndRender();
+                
+                confirmationModal.classList.remove('visible'); 
             });
             
-            document.getElementById('confirm-end-shift').addEventListener('click', () => {
-                allCompletedShifts.push({ date: new Date().toLocaleString(), trips: [...trips] });
-                localStorage.setItem('allCompletedShifts', JSON.stringify(allCompletedShifts));
-                trips = [];
-                save();
-                document.getElementById('confirmation-modal').classList.remove('visible');
+            // Logik für Gesamtabschluss
+            showOverallSummaryBtn.addEventListener('click', () => {
+                if (!Array.isArray(allCompletedShifts) || allCompletedShifts.length === 0) {
+                    alert("Es sind keine abgeschlossenen Schichten gespeichert.");
+                    return;
+                }
+                renderOverallSummary();
+                overallSummaryModal.classList.add('visible');
             });
 
-            document.getElementById('cancel-end-shift').addEventListener('click', () => {
-                document.getElementById('confirmation-modal').classList.remove('visible');
+            closeOverallSummaryModal.addEventListener('click', () => overallSummaryModal.classList.remove('visible'));
+            exportOverallPdfBtn.addEventListener('click', exportOverallPDF);
+            
+            clearOverallDataBtn.addEventListener('click', () => {
+                 if (confirm("WARNUNG: Möchten Sie WIRKLICH alle gespeicherten Schichten löschen? Diese Aktion kann nicht rückgängig gemacht werden.")) {
+                    allCompletedShifts = [];
+                    saveAndRender();
+                    alert("Alle gespeicherten Schichten wurden gelöscht.");
+                    overallSummaryModal.classList.remove('visible');
+                 }
             });
 
-            renderTrips();
+            // Initialer Aufruf zum Laden der Daten beim Start
+            saveAndRender();
         });
     </script>
 </body>
